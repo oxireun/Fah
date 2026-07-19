@@ -101,4 +101,4 @@ client.once('ready', () => {
 });
 
 // Botu çalıştır
-client.login(BOT_TOKEN);
+clienclient.login(process.env.BOT_TOKEN);
