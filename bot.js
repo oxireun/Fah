@@ -56,7 +56,7 @@ async function checkRolimonsItems() {
 
                     // Discord Embed Mesaj Tasarımı
                     const embed = new EmbedBuilder()
-                        .setTitle('🚨 ROLIMONS'A YENİ SİSTEM DÜŞTÜ! 🚨')
+                        .setTitle("🚨 ROLIMONS'A YENİ SİSTEM DÜŞTÜ! 🚨")
                         .setDescription(`**[${itemName}](https://www.roblox.com/catalog/${itemId})** isimli eşya Rolimons listelerine eklendi.`)
                         .setColor('#0099ff')
                         .addFields(
