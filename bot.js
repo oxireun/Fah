@@ -13,11 +13,22 @@ let isFirstRun = true;
 async function checkRolimonsItems() {
     try {
         console.log("[Rolimons] API kontrol ediliyor...");
+        
+        // Cloudflare engelini aşmak için detaylı tarayıcı taklidi yapıyoruz
         const response = await axios.get('https://www.rolimons.com/itemapi/itemdetails', {
-            headers: { 'User-Agent': 'Mozilla/5.0' }
+            headers: { 
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
         });
 
-        if (!response.data || !response.data.success) return;
+        if (!response.data || !response.data.success) {
+            console.log("[Rolimons] Başarısız API yanıtı veya veri boş.");
+            return;
+        }
 
         const items = response.data.items;
         const channel = await client.channels.fetch(CHANNEL_ID);
@@ -44,7 +55,12 @@ async function checkRolimonsItems() {
                 knownItemsCache.add(itemId);
             }
         }
-        isFirstRun = false;
+
+        if (isFirstRun) {
+            console.log(`[Başarılı] İlk tarama tamamlandı. Toplam ${knownItemsCache.size} eşya hafızaya alındı. İzleme aktif!`);
+            isFirstRun = false;
+        }
+        
     } catch (error) {
         console.error("[Hata]", error.message);
     }
@@ -56,5 +72,4 @@ client.once('ready', () => {
     setInterval(checkRolimonsItems, CHECK_INTERVAL);
 });
 
-// BURASI ÇOK ÖNEMLİ: Hatalı olan yer burasıydı, düzelttim:
 client.login(process.env.BOT_TOKEN);
